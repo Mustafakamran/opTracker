@@ -223,7 +223,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Column(
               children: [
                 _SettingsTile(
-                  icon: LucideIcons.cloudUpload,
+                  icon: LucideIcons.uploadCloud,
                   iconColor: AppColors.primary,
                   title: 'Backup Data',
                   subtitle: 'Export to Google Drive',
