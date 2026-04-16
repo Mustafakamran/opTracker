@@ -46,6 +46,10 @@ jobs:
           cp /tmp/flutter_scaffold/android/gradlew.bat android/
           chmod +x android/gradlew
 
+          # AGP 8.1 requires Gradle 8.0+; upgrade wrapper distribution
+          sed -i 's|gradle-.*-all.zip|gradle-8.4-all.zip|' android/gradle/wrapper/gradle-wrapper.properties
+          cat android/gradle/wrapper/gradle-wrapper.properties
+
           # Let Flutter generate local.properties with SDK paths
           flutter pub get --directory=/tmp/flutter_scaffold || true
           if [ -f /tmp/flutter_scaffold/android/local.properties ]; then
