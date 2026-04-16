@@ -40,7 +40,7 @@ jobs:
           cp /tmp/flutter_scaffold/android/gradlew android/
           cp /tmp/flutter_scaffold/android/gradlew.bat android/
           chmod +x android/gradlew
-          sed -i 's|gradle-.*-all.zip|gradle-8.4-all.zip|' android/gradle/wrapper/gradle-wrapper.properties
+          sed -i 's|gradle-.*-all.zip|gradle-8.7-all.zip|' android/gradle/wrapper/gradle-wrapper.properties
           flutter pub get --directory=/tmp/flutter_scaffold || true
           if [ -f /tmp/flutter_scaffold/android/local.properties ]; then
             cp /tmp/flutter_scaffold/android/local.properties android/local.properties
