@@ -71,7 +71,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.primary.withOpacity(0.2), width: 2),
                 ),
-                child: const Icon(LucideIcons.userCircle2, size: 40, color: AppColors.primary),
+                child: const Icon(LucideIcons.user, size: 40, color: AppColors.primary),
               ),
             )
                 .animate()
@@ -106,7 +106,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               decoration: const InputDecoration(
                 labelText: 'Display Name',
                 hintText: 'How should we call you?',
-                prefixIcon: Icon(LucideIcons.badge, size: 18),
+                prefixIcon: Icon(LucideIcons.user, size: 18),
               ),
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,

@@ -223,7 +223,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
                               borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                             ),
                             child: Icon(
-                              status.isImported ? LucideIcons.checkCircle : LucideIcons.circleOff,
+                              status.isImported ? LucideIcons.checkCircle : LucideIcons.x,
                               size: 18,
                               color: status.isImported ? AppColors.success : AppColors.zinc400,
                             ),

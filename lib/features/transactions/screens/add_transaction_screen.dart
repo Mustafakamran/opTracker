@@ -247,7 +247,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
               controller: _noteController,
               decoration: const InputDecoration(
                 labelText: 'Note (optional)',
-                prefixIcon: Icon(LucideIcons.stickyNote, size: 20),
+                prefixIcon: Icon(LucideIcons.fileText, size: 20),
               ),
               maxLines: 2,
             ).animate().fadeIn(delay: 500.ms, duration: 300.ms),

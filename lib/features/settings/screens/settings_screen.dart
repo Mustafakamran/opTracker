@@ -128,7 +128,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 const Divider(height: 24),
                 _SettingsTile(
-                  icon: LucideIcons.piggyBank,
+                  icon: LucideIcons.wallet,
                   iconColor: AppColors.success,
                   title: 'Monthly Budget',
                   subtitle: CurrencyFormatter.format(user?.monthlyBudget ?? 0),
@@ -202,7 +202,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 const Divider(height: 24),
                 _SettingsTile(
-                  icon: LucideIcons.badgeDollarSign,
+                  icon: LucideIcons.wallet,
                   iconColor: AppColors.success,
                   title: 'Currency',
                   subtitle: user?.currency ?? 'USD',
@@ -223,7 +223,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Column(
               children: [
                 _SettingsTile(
-                  icon: LucideIcons.uploadCloud,
+                  icon: LucideIcons.arrowUp,
                   iconColor: AppColors.primary,
                   title: 'Backup Data',
                   subtitle: 'Export to Google Drive',
@@ -250,7 +250,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: () => _confirmSignOut(context),
             child: Row(
               children: [
-                const Icon(LucideIcons.logOut, color: AppColors.error, size: 18),
+                const Icon(LucideIcons.arrowLeft, color: AppColors.error, size: 18),
                 AppSpacing.hGapMd,
                 Text('Sign Out',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

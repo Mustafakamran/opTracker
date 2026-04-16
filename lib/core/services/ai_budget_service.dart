@@ -9,7 +9,6 @@ class AiBudgetService {
   bool get isAiAvailable => _gemma.isInitialized;
 
   Future<bool> isModelDownloaded() => _gemma.isModelAvailable();
-  Future<String> getModelPath() => _gemma.getModelPath();
 
   /// Try to initialize the local Gemma model.
   Future<bool> initializeAi() async {

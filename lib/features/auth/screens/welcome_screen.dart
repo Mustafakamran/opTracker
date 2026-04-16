@@ -89,11 +89,11 @@ class WelcomeScreen extends ConsumerWidget {
               const Spacer(flex: 2),
 
               // Feature highlights with slide-in
-              _FeatureRow(icon: LucideIcons.bellRing, text: 'Auto-detect payments from notifications', delay: 450),
+              _FeatureRow(icon: LucideIcons.bell, text: 'Auto-detect payments from notifications', delay: 450),
               AppSpacing.vGapBase,
               _FeatureRow(icon: LucideIcons.pieChart, text: 'Smart budgets & spending insights', delay: 550),
               AppSpacing.vGapBase,
-              _FeatureRow(icon: LucideIcons.shieldCheck, text: 'Private & secure, data stays on device', delay: 650),
+              _FeatureRow(icon: LucideIcons.lock, text: 'Private & secure, data stays on device', delay: 650),
 
               const Spacer(flex: 2),
 
@@ -130,7 +130,7 @@ class WelcomeScreen extends ConsumerWidget {
                 await ref.read(currentUserProvider.notifier).signInWithGoogle();
               } catch (_) {}
             },
-            icon: const Icon(LucideIcons.chrome, size: 20),
+            icon: const Icon(LucideIcons.user, size: 20),
             label: const Text('Continue with Google'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
@@ -187,7 +187,7 @@ class WelcomeScreen extends ConsumerWidget {
                   if (user.pinHash != null) {
                     context.push('/pin-entry', extra: {'userId': user.id, 'username': user.username});
                   } else if (user.patternHash != null) {
-                    context.push('/pattern-entry', extra: {'userId': user.id, 'username': user.username});
+                    context.push('/pin-entry', extra: {'userId': user.id, 'username': user.username});
                   } else {
                     // Google user - sign in directly
                     ref.read(currentUserProvider.notifier).signInWithGoogle();
@@ -218,7 +218,7 @@ class WelcomeScreen extends ConsumerWidget {
                       ),
                     ),
                     Icon(
-                      user.pinHash != null ? LucideIcons.keyRound : LucideIcons.fingerprint,
+                      user.pinHash != null ? LucideIcons.lock : LucideIcons.fingerprint,
                       size: 18,
                       color: AppColors.zinc500,
                     ),

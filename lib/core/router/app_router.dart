@@ -28,7 +28,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       final loc = state.matchedLocation;
       final isAuthRoute = loc == '/welcome' || loc == '/signup' ||
           loc == '/pin-setup' || loc == '/pin-entry' ||
-          loc == '/pattern-setup' || loc == '/pattern-entry' ||
+          loc == '/pattern-setup' ||
           loc == '/login';
 
       if (!isAuth && !isAuthRoute) return '/welcome';
