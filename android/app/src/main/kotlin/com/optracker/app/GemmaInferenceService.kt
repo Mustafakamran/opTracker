@@ -106,7 +106,6 @@ class GemmaInferenceService(private val context: Context) {
             val options = LlmInference.LlmInferenceOptions.builder()
                 .setModelPath(modelPath)
                 .setMaxTokens(512)
-                .setTemperature(0.7f)
                 .build()
 
             llmInference = LlmInference.createFromOptions(context, options)
