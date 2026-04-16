@@ -69,7 +69,7 @@ class _AiSettingsScreenState extends ConsumerState<AiSettingsScreen> {
       }
 
       final file = result.files.first;
-      final uri = file.uri?.toString() ?? file.path;
+      final uri = file.path;
 
       if (uri == null) {
         setState(() {

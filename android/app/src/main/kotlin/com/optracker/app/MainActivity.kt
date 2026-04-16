@@ -28,9 +28,14 @@ class MainActivity : FlutterActivity() {
                     result.success(gemmaService?.getModelSizeMB() ?: 0L)
                 }
                 "importModelFromUri" -> {
-                    val uri = call.argument<String>("uri") ?: ""
+                    val path = call.argument<String>("uri") ?: ""
                     scope.launch(Dispatchers.IO) {
-                        val success = gemmaService?.importModelFromUri(uri) ?: false
+                        // file_picker returns a file path, not a content URI
+                        val success = if (path.startsWith("content://")) {
+                            gemmaService?.importModelFromUri(path) ?: false
+                        } else {
+                            gemmaService?.importModel(path) ?: false
+                        }
                         withContext(Dispatchers.Main) {
                             result.success(success)
                         }
