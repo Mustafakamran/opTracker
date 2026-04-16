@@ -33,13 +33,35 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
+      # The project was hand-assembled without flutter create,
+      # so we need to generate the Gradle wrapper and local.properties
+      - name: Generate missing Android build files
+        run: |
+          # Create a temp Flutter project to get proper Android scaffolding
+          flutter create --org com.optracker --project-name optracker /tmp/flutter_scaffold
+
+          # Copy Gradle wrapper (essential for building)
+          cp -r /tmp/flutter_scaffold/android/gradle android/
+          cp /tmp/flutter_scaffold/android/gradlew android/
+          cp /tmp/flutter_scaffold/android/gradlew.bat android/
+          chmod +x android/gradlew
+
+          # Let Flutter generate local.properties with SDK paths
+          flutter pub get --directory=/tmp/flutter_scaffold || true
+          if [ -f /tmp/flutter_scaffold/android/local.properties ]; then
+            cp /tmp/flutter_scaffold/android/local.properties android/local.properties
+          fi
+
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings || true
 
       - name: Build debug APK
         run: flutter build apk --debug
 
-      - name: Upload APK artifact
+      - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: optracker-debug-apk
