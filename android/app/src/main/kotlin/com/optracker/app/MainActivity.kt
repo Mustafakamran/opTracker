@@ -24,6 +24,21 @@ class MainActivity : FlutterActivity() {
                 "getModelPath" -> {
                     result.success(gemmaService?.getModelPath() ?: "")
                 }
+                "getModelSizeMB" -> {
+                    result.success(gemmaService?.getModelSizeMB() ?: 0L)
+                }
+                "importModelFromUri" -> {
+                    val uri = call.argument<String>("uri") ?: ""
+                    scope.launch(Dispatchers.IO) {
+                        val success = gemmaService?.importModelFromUri(uri) ?: false
+                        withContext(Dispatchers.Main) {
+                            result.success(success)
+                        }
+                    }
+                }
+                "deleteModel" -> {
+                    result.success(gemmaService?.deleteModel() ?: false)
+                }
                 "initialize" -> {
                     scope.launch(Dispatchers.IO) {
                         val success = gemmaService?.initialize() ?: false

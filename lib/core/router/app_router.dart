@@ -15,6 +15,7 @@ import '../../features/budget/screens/budgets_screen.dart';
 import '../../features/budget/screens/create_budget_screen.dart';
 import '../../features/budget/screens/budget_suggestions_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
+import '../../features/settings/screens/ai_settings_screen.dart';
 import '../../widgets/common/app_shell.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -155,6 +156,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: const BudgetSuggestionsScreen(),
           transitionsBuilder: _containerTransform,
+        ),
+      ),
+      GoRoute(
+        path: '/ai-settings',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const AiSettingsScreen(),
+          transitionsBuilder: _sharedAxisVertical,
         ),
       ),
     ],

@@ -1,13 +1,14 @@
 import 'package:flutter/services.dart';
 
-/// Flutter bridge to on-device Gemma 3 1B via MediaPipe LLM Inference.
+/// Flutter bridge to on-device Gemma via MediaPipe LLM Inference.
+/// User picks the model file from their phone storage.
 class GemmaService {
   static const _channel = MethodChannel('com.optracker.app/gemma');
 
   bool _initialized = false;
   bool get isInitialized => _initialized;
 
-  /// Check if the Gemma model file exists on device.
+  /// Check if a model file has been imported into the app.
   Future<bool> isModelAvailable() async {
     try {
       return await _channel.invokeMethod<bool>('isModelAvailable') ?? false;
@@ -16,16 +17,39 @@ class GemmaService {
     }
   }
 
-  /// Get the file path where the model should be placed.
-  Future<String> getModelPath() async {
+  /// Get model file size in MB.
+  Future<int> getModelSizeMB() async {
     try {
-      return await _channel.invokeMethod<String>('getModelPath') ?? '';
+      final size = await _channel.invokeMethod<int>('getModelSizeMB');
+      return size ?? 0;
     } catch (_) {
-      return '';
+      return 0;
     }
   }
 
-  /// Initialize the Gemma model. Call after confirming model is available.
+  /// Import a model file from a content URI (from file_picker).
+  /// The native side copies it to app's private storage.
+  Future<bool> importModelFromUri(String uri) async {
+    try {
+      return await _channel.invokeMethod<bool>('importModelFromUri', {
+        'uri': uri,
+      }) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Delete the imported model to free storage.
+  Future<bool> deleteModel() async {
+    try {
+      _initialized = false;
+      return await _channel.invokeMethod<bool>('deleteModel') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Initialize the Gemma model for inference.
   Future<bool> initialize() async {
     try {
       _initialized = await _channel.invokeMethod<bool>('initialize') ?? false;

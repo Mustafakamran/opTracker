@@ -140,6 +140,40 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           AppSpacing.vGapBase,
 
+          // AI
+          _SectionHeader(title: 'AI ASSISTANT', delay: 200),
+          AppSpacing.vGapSm,
+          OpCard(
+            animate: true,
+            animationDelay: 210,
+            onTap: () => context.push('/ai-settings'),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(colors: [AppColors.primary, AppColors.primaryLight]),
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                  ),
+                  child: const Icon(LucideIcons.brain, size: 18, color: Colors.white),
+                ),
+                AppSpacing.hGapMd,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Budget AI (Gemma)', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                      Text('On-device AI for smart suggestions', style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.zinc400)),
+                    ],
+                  ),
+                ),
+                const Icon(LucideIcons.chevronRight, size: 16, color: AppColors.zinc400),
+              ],
+            ),
+          ),
+
+          AppSpacing.vGapBase,
+
           // App Settings
           _SectionHeader(title: 'APP SETTINGS', delay: 220),
           AppSpacing.vGapSm,
