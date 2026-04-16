@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
@@ -17,10 +18,14 @@ import '../../../widgets/common/op_avatar.dart';
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
+  // Snappy spring curve — fast in, slight overshoot, quick settle
+  static const _spring = Curves.elasticOut;
+  // Quick ease for secondary motion
+  static const _ease = Curves.easeOutQuart;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
-    final period = ref.watch(selectedPeriodProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -51,12 +56,9 @@ class DashboardScreen extends ConsumerWidget {
           ],
         ),
         actions: [
+          IconButton(icon: const Icon(LucideIcons.bell, size: 20), onPressed: () {}),
           IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.add_circle_outline_rounded),
+            icon: const Icon(LucideIcons.plusCircle, size: 20),
             onPressed: () => context.push('/add-transaction'),
           ),
           AppSpacing.hGapSm,
@@ -73,56 +75,48 @@ class DashboardScreen extends ConsumerWidget {
         child: ListView(
           padding: AppSpacing.pagePadding,
           children: [
-            // Period Selector
             const PeriodSelector()
                 .animate()
-                .fadeIn(duration: 300.ms),
+                .scaleXY(begin: 0.95, end: 1, duration: 350.ms, curve: _ease)
+                .fadeIn(duration: 200.ms),
 
             AppSpacing.vGapBase,
 
-            // Spending Overview
-            const SpendingOverviewCard()
-                .animate()
-                .fadeIn(delay: 100.ms, duration: 400.ms)
-                .slideY(begin: 0.03, end: 0, curve: Curves.easeOutCubic),
+            // Cards enter with scale-up spring + slide, feels physical
+            _springCard(const SpendingOverviewCard(), 0),
 
             AppSpacing.vGapBase,
 
-            // Spending Chart
-            const SpendingChart()
-                .animate()
-                .fadeIn(delay: 200.ms, duration: 400.ms)
-                .slideY(begin: 0.03, end: 0, curve: Curves.easeOutCubic),
+            _springCard(const SpendingChart(), 1),
 
             AppSpacing.vGapBase,
 
-            // Category Breakdown
-            const CategoryBreakdownCard()
-                .animate()
-                .fadeIn(delay: 300.ms, duration: 400.ms)
-                .slideY(begin: 0.03, end: 0, curve: Curves.easeOutCubic),
+            _springCard(const CategoryBreakdownCard(), 2),
 
             AppSpacing.vGapBase,
 
-            // Budget Progress
-            const BudgetProgressCard()
-                .animate()
-                .fadeIn(delay: 400.ms, duration: 400.ms)
-                .slideY(begin: 0.03, end: 0, curve: Curves.easeOutCubic),
+            _springCard(const BudgetProgressCard(), 3),
 
             AppSpacing.vGapBase,
 
-            // Recent Transactions
-            const RecentTransactionsCard()
-                .animate()
-                .fadeIn(delay: 500.ms, duration: 400.ms)
-                .slideY(begin: 0.03, end: 0, curve: Curves.easeOutCubic),
+            _springCard(const RecentTransactionsCard(), 4),
 
             AppSpacing.vGapXxl,
           ],
         ),
       ),
     );
+  }
+
+  /// Each card scales up from 0.92 with a spring overshoot + slight upward slide.
+  /// Staggered by index so they cascade in.
+  Widget _springCard(Widget child, int index) {
+    final delay = Duration(milliseconds: 60 + index * 70);
+    return child
+        .animate()
+        .scaleXY(begin: 0.92, end: 1, duration: 500.ms, delay: delay, curve: _spring)
+        .slideY(begin: 0.04, end: 0, duration: 350.ms, delay: delay, curve: _ease)
+        .fadeIn(duration: 180.ms, delay: delay);
   }
 
   String _greeting() {

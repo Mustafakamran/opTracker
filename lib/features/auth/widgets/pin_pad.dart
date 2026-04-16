@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 
@@ -42,7 +43,7 @@ class PinPad extends StatelessWidget {
           return onBiometric != null
               ? _PinButton(
                   onTap: onBiometric!,
-                  child: const Icon(Icons.fingerprint_rounded, size: 28),
+                  child: const Icon(LucideIcons.fingerprint, size: 28),
                 )
               : const SizedBox();
         }
@@ -50,7 +51,7 @@ class PinPad extends StatelessWidget {
         if (label == 'del') {
           return _PinButton(
             onTap: onDelete,
-            child: const Icon(Icons.backspace_rounded, size: 22),
+            child: const Icon(LucideIcons.delete, size: 22),
           );
         }
 

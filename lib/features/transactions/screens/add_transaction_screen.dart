@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -78,7 +79,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.close_rounded),
+          icon: const Icon(LucideIcons.x),
           onPressed: () => context.pop(),
         ),
         title: const Text('Add Transaction'),
@@ -155,7 +156,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
               controller: _merchantController,
               decoration: const InputDecoration(
                 labelText: 'Merchant / Recipient',
-                prefixIcon: Icon(Icons.store_rounded, size: 20),
+                prefixIcon: Icon(LucideIcons.store, size: 20),
               ),
               textCapitalization: TextCapitalization.words,
             ).animate().fadeIn(delay: 200.ms, duration: 300.ms),
@@ -222,12 +223,12 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
             // Date Picker
             ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.calendar_today_rounded, size: 20),
+              leading: const Icon(LucideIcons.calendar, size: 20),
               title: Text(
                 '${_date.day}/${_date.month}/${_date.year}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              trailing: const Icon(Icons.chevron_right_rounded),
+              trailing: const Icon(LucideIcons.chevronRight),
               onTap: () async {
                 final picked = await showDatePicker(
                   context: context,
@@ -246,7 +247,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
               controller: _noteController,
               decoration: const InputDecoration(
                 labelText: 'Note (optional)',
-                prefixIcon: Icon(Icons.note_rounded, size: 20),
+                prefixIcon: Icon(LucideIcons.stickyNote, size: 20),
               ),
               maxLines: 2,
             ).animate().fadeIn(delay: 500.ms, duration: 300.ms),

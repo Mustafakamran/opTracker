@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
 
-/// Shadcn-inspired color system using zinc/slate neutrals with a modern accent.
+/// Blue analogous color system - single hue with tonal variations.
 class AppColors {
   AppColors._();
 
-  // ── Brand / Accent ──────────────────────────────────────────────
-  static const Color primary = Color(0xFF6366F1);       // Indigo-500
-  static const Color primaryLight = Color(0xFF818CF8);   // Indigo-400
-  static const Color primaryDark = Color(0xFF4F46E5);    // Indigo-600
-  static const Color primaryMuted = Color(0xFFEEF2FF);   // Indigo-50
+  // ── Brand / Blue Accent ─────────────────────────────────────────
+  static const Color primary = Color(0xFF2563EB);       // Blue-600
+  static const Color primaryLight = Color(0xFF60A5FA);   // Blue-400
+  static const Color primaryDark = Color(0xFF1D4ED8);    // Blue-700
+  static const Color primaryMuted = Color(0xFFEFF6FF);   // Blue-50
+  static const Color primarySoft = Color(0xFFDBEAFE);    // Blue-100
+  static const Color primaryDeep = Color(0xFF1E40AF);    // Blue-800
 
   // ── Semantic ────────────────────────────────────────────────────
-  static const Color success = Color(0xFF22C55E);        // Green-500
+  static const Color success = Color(0xFF16A34A);        // Green-600
   static const Color successLight = Color(0xFFDCFCE7);   // Green-100
-  static const Color warning = Color(0xFFF59E0B);        // Amber-500
+  static const Color warning = Color(0xFFD97706);        // Amber-600
   static const Color warningLight = Color(0xFFFEF3C7);   // Amber-100
-  static const Color error = Color(0xFFEF4444);          // Red-500
+  static const Color error = Color(0xFFDC2626);          // Red-600
   static const Color errorLight = Color(0xFFFEE2E2);     // Red-100
-  static const Color info = Color(0xFF3B82F6);           // Blue-500
-  static const Color infoLight = Color(0xFFDBEAFE);      // Blue-100
+  static const Color info = Color(0xFF0284C7);           // Sky-600
+  static const Color infoLight = Color(0xFFE0F2FE);      // Sky-100
 
-  // ── Zinc Neutrals (Light Mode) ─────────────────────────────────
-  static const Color zinc50 = Color(0xFFFAFAFA);
-  static const Color zinc100 = Color(0xFFF4F4F5);
-  static const Color zinc200 = Color(0xFFE4E4E7);
-  static const Color zinc300 = Color(0xFFD4D4D8);
-  static const Color zinc400 = Color(0xFFA1A1AA);
-  static const Color zinc500 = Color(0xFF71717A);
-  static const Color zinc600 = Color(0xFF52525B);
-  static const Color zinc700 = Color(0xFF3F3F46);
-  static const Color zinc800 = Color(0xFF27272A);
-  static const Color zinc900 = Color(0xFF18181B);
-  static const Color zinc950 = Color(0xFF09090B);
+  // ── Slate Neutrals ─────────────────────────────────────────────
+  static const Color zinc50 = Color(0xFFF8FAFC);    // Slate-50
+  static const Color zinc100 = Color(0xFFF1F5F9);   // Slate-100
+  static const Color zinc200 = Color(0xFFE2E8F0);   // Slate-200
+  static const Color zinc300 = Color(0xFFCBD5E1);   // Slate-300
+  static const Color zinc400 = Color(0xFF94A3B8);   // Slate-400
+  static const Color zinc500 = Color(0xFF64748B);   // Slate-500
+  static const Color zinc600 = Color(0xFF475569);   // Slate-600
+  static const Color zinc700 = Color(0xFF334155);   // Slate-700
+  static const Color zinc800 = Color(0xFF1E293B);   // Slate-800
+  static const Color zinc900 = Color(0xFF0F172A);   // Slate-900
+  static const Color zinc950 = Color(0xFF020617);   // Slate-950
 
   // ── Light Theme ─────────────────────────────────────────────────
   static const Color backgroundLight = Color(0xFFFFFFFF);
@@ -51,15 +53,15 @@ class AppColors {
   static const Color textSecondaryDark = zinc400;
   static const Color textMutedDark = zinc500;
 
-  // ── Category Colors ─────────────────────────────────────────────
-  static const Color categoryFood = Color(0xFFF97316);
-  static const Color categoryShopping = Color(0xFFEC4899);
-  static const Color categoryBills = Color(0xFF8B5CF6);
-  static const Color categoryTransfer = Color(0xFF06B6D4);
-  static const Color categoryEntertainment = Color(0xFFF43F5E);
-  static const Color categoryTransport = Color(0xFF14B8A6);
-  static const Color categoryHealth = Color(0xFF22C55E);
-  static const Color categoryEducation = Color(0xFF3B82F6);
-  static const Color categorySubscription = Color(0xFFA855F7);
-  static const Color categoryOther = Color(0xFF6B7280);
+  // ── Category Colors (blue-tinted variants) ──────────────────────
+  static const Color categoryFood = Color(0xFFEA580C);
+  static const Color categoryShopping = Color(0xFFDB2777);
+  static const Color categoryBills = Color(0xFF7C3AED);
+  static const Color categoryTransfer = Color(0xFF0891B2);
+  static const Color categoryEntertainment = Color(0xFFE11D48);
+  static const Color categoryTransport = Color(0xFF0D9488);
+  static const Color categoryHealth = Color(0xFF16A34A);
+  static const Color categoryEducation = Color(0xFF2563EB);
+  static const Color categorySubscription = Color(0xFF9333EA);
+  static const Color categoryOther = Color(0xFF64748B);
 }

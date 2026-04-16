@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/constants/enums.dart';
@@ -42,7 +43,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         title: const Text('Transactions'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_rounded),
+            icon: const Icon(LucideIcons.plus),
             onPressed: () => context.push('/add-transaction'),
           ),
         ],
@@ -60,10 +61,10 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               onChanged: (v) => setState(() => _searchQuery = v.toLowerCase()),
               decoration: InputDecoration(
                 hintText: 'Search transactions...',
-                prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                prefixIcon: const Icon(LucideIcons.search, size: 20),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear_rounded, size: 18),
+                        icon: const Icon(LucideIcons.x, size: 18),
                         onPressed: () {
                           _searchController.clear();
                           setState(() => _searchQuery = '');
@@ -121,7 +122,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
 
                 if (filtered.isEmpty) {
                   return OpEmptyState(
-                    icon: Icons.receipt_long_rounded,
+                    icon: LucideIcons.receipt,
                     title: _searchQuery.isNotEmpty
                         ? 'No matching transactions'
                         : 'No transactions yet',
@@ -161,22 +162,15 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                           ),
                         ),
                         ...items.asMap().entries.map((entry) {
+                          final d = Duration(milliseconds: entry.key * 40);
                           return TransactionListItem(
                             transaction: entry.value,
                             onTap: () => context.push('/transactions/${entry.value.id}'),
                           )
                               .animate()
-                              .fadeIn(
-                                delay: Duration(milliseconds: entry.key * 50),
-                                duration: 300.ms,
-                              )
-                              .slideX(
-                                begin: 0.03,
-                                end: 0,
-                                delay: Duration(milliseconds: entry.key * 50),
-                                duration: 300.ms,
-                                curve: Curves.easeOutCubic,
-                              );
+                              .scaleXY(begin: 0.95, end: 1, delay: d, duration: 350.ms, curve: Curves.elasticOut)
+                              .slideX(begin: 0.06, end: 0, delay: d, duration: 280.ms, curve: Curves.easeOutQuart)
+                              .fadeIn(duration: 120.ms, delay: d);
                         }),
                       ],
                     );

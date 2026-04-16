@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/constants/enums.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 
-/// Returns the icon and color for a transaction category.
 class CategoryIcon extends StatelessWidget {
   final TransactionCategory category;
   final double size;
 
-  const CategoryIcon({
-    super.key,
-    required this.category,
-    this.size = 40,
-  });
+  const CategoryIcon({super.key, required this.category, this.size = 40});
 
   @override
   Widget build(BuildContext context) {
     final (icon, color) = _iconAndColor(category);
-
     return Container(
       width: size,
       height: size,
@@ -31,17 +26,17 @@ class CategoryIcon extends StatelessWidget {
 
   static (IconData, Color) _iconAndColor(TransactionCategory category) {
     return switch (category) {
-      TransactionCategory.food => (Icons.restaurant_rounded, AppColors.categoryFood),
-      TransactionCategory.shopping => (Icons.shopping_bag_rounded, AppColors.categoryShopping),
-      TransactionCategory.bills => (Icons.receipt_rounded, AppColors.categoryBills),
-      TransactionCategory.transfer => (Icons.swap_horiz_rounded, AppColors.categoryTransfer),
-      TransactionCategory.entertainment => (Icons.movie_rounded, AppColors.categoryEntertainment),
-      TransactionCategory.transport => (Icons.directions_car_rounded, AppColors.categoryTransport),
-      TransactionCategory.health => (Icons.local_hospital_rounded, AppColors.categoryHealth),
-      TransactionCategory.education => (Icons.school_rounded, AppColors.categoryEducation),
-      TransactionCategory.subscription => (Icons.autorenew_rounded, AppColors.categorySubscription),
-      TransactionCategory.income => (Icons.trending_up_rounded, AppColors.success),
-      TransactionCategory.other => (Icons.more_horiz_rounded, AppColors.categoryOther),
+      TransactionCategory.food => (LucideIcons.utensils, AppColors.categoryFood),
+      TransactionCategory.shopping => (LucideIcons.shoppingBag, AppColors.categoryShopping),
+      TransactionCategory.bills => (LucideIcons.fileText, AppColors.categoryBills),
+      TransactionCategory.transfer => (LucideIcons.arrowLeftRight, AppColors.categoryTransfer),
+      TransactionCategory.entertainment => (LucideIcons.film, AppColors.categoryEntertainment),
+      TransactionCategory.transport => (LucideIcons.car, AppColors.categoryTransport),
+      TransactionCategory.health => (LucideIcons.heartPulse, AppColors.categoryHealth),
+      TransactionCategory.education => (LucideIcons.graduationCap, AppColors.categoryEducation),
+      TransactionCategory.subscription => (LucideIcons.repeat, AppColors.categorySubscription),
+      TransactionCategory.income => (LucideIcons.trendingUp, AppColors.success),
+      TransactionCategory.other => (LucideIcons.moreHorizontal, AppColors.categoryOther),
     };
   }
 

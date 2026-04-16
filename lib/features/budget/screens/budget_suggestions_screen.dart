@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
@@ -34,7 +35,7 @@ class BudgetSuggestionsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(LucideIcons.arrowLeft),
           onPressed: () => context.pop(),
         ),
         title: const Text('Budget Suggestions'),
@@ -50,7 +51,7 @@ class BudgetSuggestionsScreen extends ConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.lightbulb_outline_rounded,
+                    Icon(LucideIcons.lightbulb,
                         size: 48, color: AppColors.zinc300),
                     AppSpacing.vGapBase,
                     Text(
@@ -87,7 +88,7 @@ class BudgetSuggestionsScreen extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.auto_awesome_rounded,
+                          Icon(LucideIcons.sparkles,
                               size: 18, color: AppColors.primary),
                           AppSpacing.hGapSm,
                           Text(
@@ -248,10 +249,10 @@ class BudgetSuggestionsScreen extends ConsumerWidget {
 
   (Color, IconData, Color) _typeStyle(SuggestionType type) {
     return switch (type) {
-      SuggestionType.reduce => (AppColors.warning, Icons.trending_down_rounded, AppColors.warningLight),
-      SuggestionType.increase => (AppColors.error, Icons.trending_up_rounded, AppColors.errorLight),
-      SuggestionType.maintain => (AppColors.success, Icons.check_circle_rounded, AppColors.successLight),
-      SuggestionType.newBudget => (AppColors.info, Icons.add_circle_rounded, AppColors.infoLight),
+      SuggestionType.reduce => (AppColors.warning, LucideIcons.trendingDown, AppColors.warningLight),
+      SuggestionType.increase => (AppColors.error, LucideIcons.trendingUp, AppColors.errorLight),
+      SuggestionType.maintain => (AppColors.success, LucideIcons.checkCircle, AppColors.successLight),
+      SuggestionType.newBudget => (AppColors.info, LucideIcons.plusCircle, AppColors.infoLight),
     };
   }
 }

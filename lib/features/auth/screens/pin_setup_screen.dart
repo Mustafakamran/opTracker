@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
@@ -91,7 +92,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(LucideIcons.arrowLeft),
           onPressed: () => context.pop(),
         ),
       ),
@@ -102,7 +103,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
             children: [
               const Spacer(),
               Icon(
-                Icons.lock_rounded,
+                LucideIcons.lock,
                 size: 48,
                 color: AppColors.primary,
               ).animate().fadeIn(duration: 300.ms),

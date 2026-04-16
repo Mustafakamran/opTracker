@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/app_providers.dart';
 import '../../features/auth/screens/welcome_screen.dart';
-import '../../features/auth/screens/login_screen.dart';
+import '../../features/auth/screens/signup_screen.dart';
 import '../../features/auth/screens/pin_setup_screen.dart';
 import '../../features/auth/screens/pin_entry_screen.dart';
 import '../../features/auth/screens/pattern_setup_screen.dart';
@@ -24,32 +24,40 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/dashboard',
     redirect: (context, state) {
       final isAuth = user != null;
-      final isAuthRoute = state.matchedLocation == '/welcome' ||
-          state.matchedLocation == '/login' ||
-          state.matchedLocation == '/pin-setup' ||
-          state.matchedLocation == '/pin-entry' ||
-          state.matchedLocation == '/pattern-setup';
+      final loc = state.matchedLocation;
+      final isAuthRoute = loc == '/welcome' || loc == '/signup' ||
+          loc == '/pin-setup' || loc == '/pin-entry' ||
+          loc == '/pattern-setup' || loc == '/pattern-entry' ||
+          loc == '/login';
 
       if (!isAuth && !isAuthRoute) return '/welcome';
       if (isAuth && isAuthRoute) return '/dashboard';
       return null;
     },
     routes: [
-      // ── Auth Routes ───────────────────────────────────────────
+      // ── Auth ──────────────────────────────────────────────────
       GoRoute(
         path: '/welcome',
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const WelcomeScreen(),
-          transitionsBuilder: _fadeTransition,
+          transitionsBuilder: _morphTransition,
+        ),
+      ),
+      GoRoute(
+        path: '/signup',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const SignupScreen(),
+          transitionsBuilder: _sharedAxisVertical,
         ),
       ),
       GoRoute(
         path: '/login',
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child: const LoginScreen(),
-          transitionsBuilder: _slideUpTransition,
+          child: const SignupScreen(), // Reuse signup for now
+          transitionsBuilder: _sharedAxisVertical,
         ),
       ),
       GoRoute(
@@ -57,7 +65,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const PinSetupScreen(),
-          transitionsBuilder: _slideUpTransition,
+          transitionsBuilder: _sharedAxisVertical,
         ),
       ),
       GoRoute(
@@ -65,7 +73,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const PinEntryScreen(),
-          transitionsBuilder: _fadeTransition,
+          transitionsBuilder: _morphTransition,
         ),
       ),
       GoRoute(
@@ -73,11 +81,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const PatternSetupScreen(),
-          transitionsBuilder: _slideUpTransition,
+          transitionsBuilder: _sharedAxisVertical,
         ),
       ),
 
-      // ── Main Shell (Bottom Nav) ───────────────────────────────
+      // ── Main Shell ────────────────────────────────────────────
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
@@ -86,7 +94,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
               child: const DashboardScreen(),
-              transitionsBuilder: _fadeTransition,
+              transitionsBuilder: _sharedAxisHorizontal,
             ),
           ),
           GoRoute(
@@ -94,7 +102,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
               child: const TransactionsScreen(),
-              transitionsBuilder: _fadeTransition,
+              transitionsBuilder: _sharedAxisHorizontal,
             ),
           ),
           GoRoute(
@@ -102,7 +110,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
               child: const BudgetsScreen(),
-              transitionsBuilder: _fadeTransition,
+              transitionsBuilder: _sharedAxisHorizontal,
             ),
           ),
           GoRoute(
@@ -110,7 +118,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
               child: const SettingsScreen(),
-              transitionsBuilder: _fadeTransition,
+              transitionsBuilder: _sharedAxisHorizontal,
             ),
           ),
         ],
@@ -121,10 +129,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/transactions/:id',
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child: TransactionDetailScreen(
-            transactionId: state.pathParameters['id']!,
-          ),
-          transitionsBuilder: _slideLeftTransition,
+          child: TransactionDetailScreen(transactionId: state.pathParameters['id']!),
+          transitionsBuilder: _containerTransform,
         ),
       ),
       GoRoute(
@@ -132,7 +138,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const AddTransactionScreen(),
-          transitionsBuilder: _slideUpTransition,
+          transitionsBuilder: _sharedAxisVertical,
         ),
       ),
       GoRoute(
@@ -140,7 +146,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const CreateBudgetScreen(),
-          transitionsBuilder: _slideUpTransition,
+          transitionsBuilder: _sharedAxisVertical,
         ),
       ),
       GoRoute(
@@ -148,52 +154,90 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const BudgetSuggestionsScreen(),
-          transitionsBuilder: _slideLeftTransition,
+          transitionsBuilder: _containerTransform,
         ),
       ),
     ],
   );
 });
 
-// ── Transition Builders ───────────────────────────────────────────
+// ── Morph Transition (scale + fade, smooth and premium) ─────────
 
-Widget _fadeTransition(
+Widget _morphTransition(
   BuildContext context,
   Animation<double> animation,
   Animation<double> secondaryAnimation,
   Widget child,
 ) {
-  return FadeTransition(opacity: animation, child: child);
-}
-
-Widget _slideUpTransition(
-  BuildContext context,
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  Widget child,
-) {
-  final tween = Tween(
-    begin: const Offset(0, 0.15),
-    end: Offset.zero,
-  ).chain(CurveTween(curve: Curves.easeOutCubic));
-  return SlideTransition(
-    position: animation.drive(tween),
-    child: FadeTransition(opacity: animation, child: child),
+  final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+  return FadeTransition(
+    opacity: curvedAnimation,
+    child: ScaleTransition(
+      scale: Tween(begin: 0.92, end: 1.0).animate(curvedAnimation),
+      child: child,
+    ),
   );
 }
 
-Widget _slideLeftTransition(
+// ── Shared Axis Horizontal (tab switches) ───────────────────────
+
+Widget _sharedAxisHorizontal(
   BuildContext context,
   Animation<double> animation,
   Animation<double> secondaryAnimation,
   Widget child,
 ) {
-  final tween = Tween(
-    begin: const Offset(0.15, 0),
-    end: Offset.zero,
-  ).chain(CurveTween(curve: Curves.easeOutCubic));
-  return SlideTransition(
-    position: animation.drive(tween),
-    child: FadeTransition(opacity: animation, child: child),
+  final curvedAnim = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+  final secondaryCurved = CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeOutCubic);
+
+  return FadeTransition(
+    opacity: Tween(begin: 0.0, end: 1.0).animate(curvedAnim),
+    child: SlideTransition(
+      position: Tween(begin: const Offset(0.08, 0), end: Offset.zero).animate(curvedAnim),
+      child: FadeTransition(
+        opacity: Tween(begin: 1.0, end: 0.7).animate(secondaryCurved),
+        child: SlideTransition(
+          position: Tween(begin: Offset.zero, end: const Offset(-0.08, 0)).animate(secondaryCurved),
+          child: child,
+        ),
+      ),
+    ),
+  );
+}
+
+// ── Shared Axis Vertical (modal push) ───────────────────────────
+
+Widget _sharedAxisVertical(
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
+  final curvedAnim = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+  return FadeTransition(
+    opacity: curvedAnim,
+    child: SlideTransition(
+      position: Tween(begin: const Offset(0, 0.06), end: Offset.zero).animate(curvedAnim),
+      child: child,
+    ),
+  );
+}
+
+// ── Container Transform (list → detail, scale morph) ────────────
+
+Widget _containerTransform(
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
+  final curvedAnim = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+  return FadeTransition(
+    opacity: curvedAnim,
+    child: ScaleTransition(
+      scale: Tween(begin: 0.94, end: 1.0).animate(curvedAnim),
+      alignment: Alignment.center,
+      child: child,
+    ),
   );
 }

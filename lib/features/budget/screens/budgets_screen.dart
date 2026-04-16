@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
@@ -24,7 +25,7 @@ class BudgetsScreen extends ConsumerWidget {
         actions: [
           TextButton.icon(
             onPressed: () => context.push('/budget-suggestions'),
-            icon: const Icon(Icons.auto_awesome_rounded, size: 18),
+            icon: const Icon(LucideIcons.sparkles, size: 18),
             label: const Text('Suggestions'),
           ),
         ],
@@ -33,7 +34,7 @@ class BudgetsScreen extends ConsumerWidget {
         onPressed: () => context.push('/create-budget'),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
-        icon: const Icon(Icons.add_rounded),
+        icon: const Icon(LucideIcons.plus),
         label: const Text('New Budget'),
       ),
       body: budgetsAsync.when(
@@ -42,7 +43,7 @@ class BudgetsScreen extends ConsumerWidget {
         data: (budgets) {
           if (budgets.isEmpty) {
             return OpEmptyState(
-              icon: Icons.pie_chart_rounded,
+              icon: LucideIcons.pieChart,
               title: 'No Budgets Yet',
               subtitle: 'Create budgets to control your spending across categories',
               actionLabel: 'Get AI Suggestions',
@@ -230,7 +231,7 @@ class BudgetsScreen extends ConsumerWidget {
                             if (budget.isOverBudget)
                               Row(
                                 children: [
-                                  const Icon(Icons.warning_rounded,
+                                  const Icon(LucideIcons.alertTriangle,
                                       size: 14, color: AppColors.error),
                                   AppSpacing.hGapXs,
                                   Text(

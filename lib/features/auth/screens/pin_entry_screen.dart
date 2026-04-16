@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
@@ -20,8 +22,13 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
 
   static const _pinLength = 4;
 
+  String? get _username {
+    final extra = GoRouterState.of(context).extra as Map<String, dynamic>?;
+    return extra?['username'] as String?;
+  }
+
   void _onDigit(String digit) {
-    if (_pin.length >= _pinLength) return;
+    if (_pin.length >= _pinLength || _attempts >= 5) return;
     setState(() {
       _pin += digit;
       _hasError = false;
@@ -41,14 +48,14 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   Future<void> _verifyPin() async {
-    final user = ref.read(currentUserProvider);
-    if (user == null) return;
+    final username = _username;
+    if (username == null) return;
 
     final success = await ref
         .read(currentUserProvider.notifier)
-        .signInWithPin(user.username, _pin);
+        .signInWithPin(username, _pin);
 
-    if (!success) {
+    if (!success && mounted) {
       setState(() {
         _hasError = true;
         _pin = '';
@@ -59,9 +66,15 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserProvider);
-
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.arrowLeft),
+          onPressed: () => context.pop(),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Padding(
           padding: AppSpacing.pagePadding,
@@ -69,47 +82,35 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
             children: [
               const Spacer(),
 
-              Icon(
-                Icons.lock_rounded,
-                size: 48,
-                color: AppColors.primary,
-              ),
+              Icon(LucideIcons.lock, size: 44, color: AppColors.primary)
+                  .animate()
+                  .scale(begin: const Offset(0.5, 0.5), duration: 500.ms, curve: Curves.elasticOut),
 
               AppSpacing.vGapLg,
 
-              Text(
-                'Welcome Back',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
+              Text('Welcome Back', style: Theme.of(context).textTheme.headlineMedium)
+                  .animate()
+                  .slideY(begin: 0.2, end: 0, duration: 400.ms, delay: 100.ms, curve: Curves.easeOutCubic)
+                  .fadeIn(delay: 100.ms),
 
-              AppSpacing.vGapXs,
-
-              if (user != null)
+              if (_username != null) ...[
+                AppSpacing.vGapXs,
                 Text(
-                  user.displayName ?? user.username,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.zinc500,
-                      ),
+                  _username!,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.zinc500),
                 ),
+              ],
 
               AppSpacing.vGapXxl,
 
-              PinDots(
-                length: _pinLength,
-                filled: _pin.length,
-                error: _hasError,
-              ),
+              PinDots(length: _pinLength, filled: _pin.length, error: _hasError),
 
               if (_hasError) ...[
                 AppSpacing.vGapMd,
                 Text(
-                  _attempts >= 3
-                      ? 'Too many attempts. Please wait.'
-                      : 'Incorrect PIN. Try again.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.error,
-                      ),
-                ).animate().shakeX(hz: 3, amount: 4, duration: 300.ms),
+                  _attempts >= 5 ? 'Too many attempts.' : 'Incorrect PIN. Try again.',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.error),
+                ).animate().shakeX(hz: 4, amount: 4, duration: 300.ms),
               ],
 
               const Spacer(),
@@ -117,7 +118,7 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
               SizedBox(
                 width: 280,
                 child: PinPad(
-                  onDigit: _attempts >= 5 ? (_) {} : _onDigit,
+                  onDigit: _onDigit,
                   onDelete: _onDelete,
                 ),
               ),

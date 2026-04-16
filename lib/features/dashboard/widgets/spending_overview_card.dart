@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
@@ -56,7 +57,7 @@ class SpendingOverviewCard extends ConsumerWidget {
                       label: 'Income',
                       value: CurrencyFormatter.format(income),
                       color: AppColors.success,
-                      icon: Icons.trending_up_rounded,
+                      icon: LucideIcons.trendingUp,
                     ),
                   ),
                   Container(
@@ -70,8 +71,8 @@ class SpendingOverviewCard extends ConsumerWidget {
                       value: CurrencyFormatter.format(balance.abs()),
                       color: balance >= 0 ? AppColors.success : AppColors.error,
                       icon: balance >= 0
-                          ? Icons.arrow_upward_rounded
-                          : Icons.arrow_downward_rounded,
+                          ? LucideIcons.arrowUp
+                          : LucideIcons.arrowDown,
                     ),
                   ),
                   Container(
@@ -84,7 +85,7 @@ class SpendingOverviewCard extends ConsumerWidget {
                       label: 'Available',
                       value: CurrencyFormatter.compact(available),
                       color: AppColors.info,
-                      icon: Icons.account_balance_wallet_rounded,
+                      icon: LucideIcons.wallet,
                     ),
                   ),
                 ],

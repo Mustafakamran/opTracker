@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppShell extends StatelessWidget {
@@ -41,25 +42,26 @@ class AppShell extends StatelessWidget {
           surfaceTintColor: Colors.transparent,
           indicatorColor: AppColors.primary.withOpacity(0.12),
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          animationDuration: const Duration(milliseconds: 400),
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.dashboard_outlined),
-              selectedIcon: Icon(Icons.dashboard_rounded),
+              icon: Icon(LucideIcons.layoutDashboard, size: 20),
+              selectedIcon: Icon(LucideIcons.layoutDashboard, size: 20),
               label: 'Dashboard',
             ),
             NavigationDestination(
-              icon: Icon(Icons.receipt_long_outlined),
-              selectedIcon: Icon(Icons.receipt_long_rounded),
+              icon: Icon(LucideIcons.arrowLeftRight, size: 20),
+              selectedIcon: Icon(LucideIcons.arrowLeftRight, size: 20),
               label: 'Transactions',
             ),
             NavigationDestination(
-              icon: Icon(Icons.pie_chart_outline_rounded),
-              selectedIcon: Icon(Icons.pie_chart_rounded),
+              icon: Icon(LucideIcons.pieChart, size: 20),
+              selectedIcon: Icon(LucideIcons.pieChart, size: 20),
               label: 'Budgets',
             ),
             NavigationDestination(
-              icon: Icon(Icons.settings_outlined),
-              selectedIcon: Icon(Icons.settings_rounded),
+              icon: Icon(LucideIcons.settings, size: 20),
+              selectedIcon: Icon(LucideIcons.settings, size: 20),
               label: 'Settings',
             ),
           ],
@@ -70,14 +72,10 @@ class AppShell extends StatelessWidget {
 
   void _navigate(BuildContext context, int index) {
     switch (index) {
-      case 0:
-        context.go('/dashboard');
-      case 1:
-        context.go('/transactions');
-      case 2:
-        context.go('/budgets');
-      case 3:
-        context.go('/settings');
+      case 0: context.go('/dashboard');
+      case 1: context.go('/transactions');
+      case 2: context.go('/budgets');
+      case 3: context.go('/settings');
     }
   }
 }

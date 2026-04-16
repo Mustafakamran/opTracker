@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
@@ -51,7 +52,7 @@ class BudgetProgressCard extends ConsumerWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.pie_chart_rounded, color: AppColors.zinc400),
+                      Icon(LucideIcons.pieChart, color: AppColors.zinc400),
                       AppSpacing.hGapMd,
                       Expanded(
                         child: Column(

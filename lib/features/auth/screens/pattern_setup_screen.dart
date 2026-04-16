@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/providers/app_providers.dart';
+import '../widgets/pattern_grid.dart';
 
 class PatternSetupScreen extends ConsumerStatefulWidget {
   const PatternSetupScreen({super.key});
@@ -18,21 +20,13 @@ class _PatternSetupScreenState extends ConsumerState<PatternSetupScreen> {
   List<int>? _firstPattern;
   bool _isConfirming = false;
   bool _hasError = false;
-  bool _isDrawing = false;
+  String? _errorMessage;
 
-  void _onDotTap(int index) {
-    if (_pattern.contains(index)) return;
-    setState(() {
-      _pattern.add(index);
-      _hasError = false;
-      _isDrawing = true;
-    });
-  }
-
-  void _onComplete() {
-    if (_pattern.length < 4) {
+  void _onPatternComplete(List<int> pattern) {
+    if (pattern.length < 4) {
       setState(() {
         _hasError = true;
+        _errorMessage = 'Connect at least 4 dots';
         _pattern = [];
       });
       return;
@@ -40,35 +34,45 @@ class _PatternSetupScreenState extends ConsumerState<PatternSetupScreen> {
 
     if (!_isConfirming) {
       setState(() {
-        _firstPattern = List.from(_pattern);
+        _firstPattern = List.from(pattern);
         _pattern = [];
         _isConfirming = true;
-        _isDrawing = false;
+        _hasError = false;
       });
       return;
     }
 
-    if (!_listEquals(_pattern, _firstPattern!)) {
+    // Confirming
+    bool matches = pattern.length == _firstPattern!.length;
+    if (matches) {
+      for (int i = 0; i < pattern.length; i++) {
+        if (pattern[i] != _firstPattern![i]) {
+          matches = false;
+          break;
+        }
+      }
+    }
+
+    if (!matches) {
       setState(() {
         _hasError = true;
+        _errorMessage = "Patterns don't match. Try again.";
         _pattern = [];
-        _isDrawing = false;
       });
       return;
     }
 
-    _createAccount();
+    _createAccount(pattern);
   }
 
-  bool _listEquals(List<int> a, List<int> b) {
-    if (a.length != b.length) return false;
-    for (int i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) return false;
-    }
-    return true;
+  void _onPatternUpdate(List<int> pattern) {
+    setState(() {
+      _pattern = pattern;
+      _hasError = false;
+    });
   }
 
-  Future<void> _createAccount() async {
+  Future<void> _createAccount(List<int> pattern) async {
     final extra = GoRouterState.of(context).extra as Map<String, String>?;
     final username = extra?['username'] ?? 'user';
     final displayName = extra?['displayName'] ?? 'User';
@@ -77,12 +81,13 @@ class _PatternSetupScreenState extends ConsumerState<PatternSetupScreen> {
       await ref.read(currentUserProvider.notifier).createLocalUser(
             username: username,
             displayName: displayName,
-            pattern: _pattern.join('-'),
+            pattern: pattern.join('-'),
           );
     } catch (e) {
       if (mounted) {
         setState(() {
           _hasError = true;
+          _errorMessage = 'Account creation failed. Username may already exist.';
           _pattern = [];
           _firstPattern = null;
           _isConfirming = false;
@@ -91,19 +96,12 @@ class _PatternSetupScreenState extends ConsumerState<PatternSetupScreen> {
     }
   }
 
-  void _reset() {
-    setState(() {
-      _pattern = [];
-      _isDrawing = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(LucideIcons.arrowLeft),
           onPressed: () => context.pop(),
         ),
       ),
@@ -124,73 +122,27 @@ class _PatternSetupScreenState extends ConsumerState<PatternSetupScreen> {
               Text(
                 _isConfirming
                     ? 'Draw the same pattern again'
-                    : 'Connect at least 4 dots',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.zinc500,
-                    ),
+                    : 'Drag your finger across dots to connect them',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.zinc500),
+                textAlign: TextAlign.center,
               ),
 
-              if (_hasError) ...[
+              if (_hasError && _errorMessage != null) ...[
                 AppSpacing.vGapMd,
                 Text(
-                  _pattern.length < 4
-                      ? 'Connect at least 4 dots'
-                      : 'Patterns don\'t match. Try again.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.error,
-                      ),
+                  _errorMessage!,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.error),
                 ),
               ],
 
               const Spacer(),
 
-              // Pattern Grid 3x3
-              SizedBox(
-                width: 240,
-                height: 240,
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 24,
-                    crossAxisSpacing: 24,
-                  ),
-                  itemCount: 9,
-                  itemBuilder: (context, index) {
-                    final isSelected = _pattern.contains(index);
-                    return GestureDetector(
-                      onTap: () => _onDotTap(index),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isSelected
-                              ? AppColors.primary.withOpacity(0.15)
-                              : AppColors.zinc100,
-                          border: Border.all(
-                            color: isSelected
-                                ? AppColors.primary
-                                : _hasError
-                                    ? AppColors.error.withOpacity(0.5)
-                                    : AppColors.zinc300,
-                            width: isSelected ? 2.5 : 1.5,
-                          ),
-                        ),
-                        child: Center(
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            width: isSelected ? 16 : 0,
-                            height: isSelected ? 16 : 0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isSelected ? AppColors.primary : Colors.transparent,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+              // Pattern grid with drag support
+              PatternGrid(
+                pattern: _pattern,
+                onPatternUpdate: _onPatternUpdate,
+                onPatternComplete: _onPatternComplete,
+                hasError: _hasError,
               ),
 
               const Spacer(),
@@ -199,14 +151,17 @@ class _PatternSetupScreenState extends ConsumerState<PatternSetupScreen> {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: _reset,
+                      onPressed: () => setState(() {
+                        _pattern = [];
+                        _hasError = false;
+                      }),
                       child: const Text('Reset'),
                     ),
                   ),
                   AppSpacing.hGapMd,
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _pattern.length >= 4 ? _onComplete : null,
+                      onPressed: _pattern.length >= 4 ? () => _onPatternComplete(_pattern) : null,
                       child: Text(_isConfirming ? 'Confirm' : 'Continue'),
                     ),
                   ),

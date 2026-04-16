@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/constants/enums.dart';
@@ -30,17 +31,17 @@ class TransactionDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(LucideIcons.arrowLeft),
           onPressed: () => context.pop(),
         ),
         title: const Text('Transaction Details'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_rounded),
+            icon: const Icon(LucideIcons.pencil),
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline_rounded),
+            icon: const Icon(LucideIcons.trash2),
             onPressed: () => _confirmDelete(context, ref),
           ),
         ],
@@ -126,7 +127,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.auto_awesome_rounded,
+                            Icon(LucideIcons.sparkles,
                                 size: 18, color: AppColors.primary),
                             AppSpacing.hGapSm,
                             Text(
