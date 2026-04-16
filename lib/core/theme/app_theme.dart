@@ -39,7 +39,7 @@ class AppTheme {
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           centerTitle: false,
         ),
-        cardTheme: CardThemeData(
+        cardTheme: CardTheme(
           elevation: 0,
           color: AppColors.cardLight,
           surfaceTintColor: Colors.transparent,
@@ -155,7 +155,7 @@ class AppTheme {
           ),
           elevation: 0,
         ),
-        dialogTheme: DialogThemeData(
+        dialogTheme: DialogTheme(
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
           shape: RoundedRectangleBorder(
@@ -197,7 +197,7 @@ class AppTheme {
           systemOverlayStyle: SystemUiOverlayStyle.light,
           centerTitle: false,
         ),
-        cardTheme: CardThemeData(
+        cardTheme: CardTheme(
           elevation: 0,
           color: AppColors.cardDark,
           surfaceTintColor: Colors.transparent,
@@ -281,7 +281,7 @@ class AppTheme {
           ),
           elevation: 0,
         ),
-        dialogTheme: DialogThemeData(
+        dialogTheme: DialogTheme(
           backgroundColor: AppColors.zinc900,
           surfaceTintColor: Colors.transparent,
           shape: RoundedRectangleBorder(

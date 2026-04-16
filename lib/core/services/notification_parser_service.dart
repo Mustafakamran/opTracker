@@ -153,15 +153,15 @@ class NotificationParserService {
 
   String? _extractMerchant(String text, String? title) {
     // Try to extract from "at <merchant>" pattern
-    final atMatch = RegExp(r'at\s+([A-Z][\w\s&\'-]+)', caseSensitive: false).firstMatch(text);
+    final atMatch = RegExp("at\\s+([A-Z][\\w\\s&'-]+)", caseSensitive: false).firstMatch(text);
     if (atMatch != null) return atMatch.group(1)?.trim();
 
     // Try to extract from "to <recipient>" pattern
-    final toMatch = RegExp(r'to\s+([A-Z][\w\s&\'-]+)', caseSensitive: false).firstMatch(text);
+    final toMatch = RegExp("to\\s+([A-Z][\\w\\s&'-]+)", caseSensitive: false).firstMatch(text);
     if (toMatch != null) return toMatch.group(1)?.trim();
 
     // Try to extract from "from <sender>" pattern
-    final fromMatch = RegExp(r'from\s+([A-Z][\w\s&\'-]+)', caseSensitive: false).firstMatch(text);
+    final fromMatch = RegExp("from\\s+([A-Z][\\w\\s&'-]+)", caseSensitive: false).firstMatch(text);
     if (fromMatch != null) return fromMatch.group(1)?.trim();
 
     return title;
